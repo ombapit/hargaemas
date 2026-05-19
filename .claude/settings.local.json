@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item -ItemType Directory -Path \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\" -Force)",
+      "PowerShell(Move-Item \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\main.go\" \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\main.go\")",
+      "PowerShell(Move-Item \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\go.mod\" \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\go.mod\")",
+      "PowerShell(Move-Item \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\go.sum\" \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\go.sum\")",
+      "PowerShell(Move-Item \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\Dockerfile\" \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\Dockerfile\")",
+      "Bash(find \"/mnt/c/data_dave/work/alone/david/hargaemas\" -type f)",
+      "Read(//mnt/c/data_dave/work/alone/david/**)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\" -Recurse -File | ForEach-Object { $_.FullName })",
+      "WebFetch(domain:rajaemasindonesia.co.id)"
+    ]
+  }
+}

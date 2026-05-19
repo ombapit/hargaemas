@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hargaemas_db
+    environment:
+      POSTGRES_DB: hargaemas
+      POSTGRES_USER: hargaemas
+      POSTGRES_PASSWORD: hargaemasBismillah123!
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hargaemas"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./be
+    container_name: hargaemas_api
+    environment:
+      DB_DSN: postgres://hargaemas:hargaemasBismillah123!@db:5432/hargaemas?sslmode=disable
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
