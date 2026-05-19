@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	_ "embed"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -21,6 +21,9 @@ import (
 
 //go:embed templates/index.html
 var indexHTML []byte
+
+//go:embed static
+var staticFiles embed.FS
 
 var (
 	db       *sql.DB
@@ -70,6 +73,7 @@ func main() {
 	defer c.Stop()
 
 	http.HandleFunc("/", handleIndex)
+	http.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 	http.HandleFunc("/prices", handlePrices)
 	http.HandleFunc("/fetch", handleFetch)
 
