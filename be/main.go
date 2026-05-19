@@ -148,14 +148,18 @@ func handlePrices(w http.ResponseWriter, r *http.Request) {
 		rows, err = db.Query(
 			`SELECT id, price_date, recorded_at, kadar, harga_beli FROM gold_prices
 			 WHERE price_date >= $1 AND price_date <= $2 AND kadar = $3
-			 ORDER BY price_date DESC, kadar`,
+			 ORDER BY price_date DESC,
+			          CAST(REGEXP_REPLACE(kadar, '[^0-9]', '', 'g') AS INTEGER) DESC,
+			          kadar DESC`,
 			fromDate, toDate, kadar,
 		)
 	} else {
 		rows, err = db.Query(
 			`SELECT id, price_date, recorded_at, kadar, harga_beli FROM gold_prices
 			 WHERE price_date >= $1 AND price_date <= $2
-			 ORDER BY price_date DESC, kadar`,
+			 ORDER BY price_date DESC,
+			          CAST(REGEXP_REPLACE(kadar, '[^0-9]', '', 'g') AS INTEGER) DESC,
+			          kadar DESC`,
 			fromDate, toDate,
 		)
 	}
