@@ -407,7 +407,12 @@
     // sorted unique dates
     const dates = [...new Set(allData.map(p => p.price_date))].sort();
 
-    const datasets = Object.keys(byKadar).sort().map((kadar, i) => ({
+    const datasets = Object.keys(byKadar).sort((a, b) => {
+      const na = parseInt(a.replace(/[^0-9]/g, ''));
+      const nb = parseInt(b.replace(/[^0-9]/g, ''));
+      if (nb !== na) return nb - na;
+      return b.localeCompare(a);
+    }).map((kadar, i) => ({
       label: kadar,
       data: dates.map(d => byKadar[kadar][d] ?? null),
       borderColor: COLORS[i % COLORS.length],
