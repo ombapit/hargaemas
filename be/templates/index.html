@@ -370,7 +370,12 @@
   }
 
   function buildFilters() {
-    const kadars = [...new Set(allData.map(p => p.kadar))].sort();
+    const kadars = [...new Set(allData.map(p => p.kadar))].sort((a, b) => {
+      const na = parseInt(a.replace(/[^0-9]/g, ''));
+      const nb = parseInt(b.replace(/[^0-9]/g, ''));
+      if (nb !== na) return nb - na;
+      return b.localeCompare(a); // K24* before K24
+    });
     if (activeKadars.size === 0) activeKadars = new Set(kadars);
 
     const wrap = document.getElementById('kadar-filters');
