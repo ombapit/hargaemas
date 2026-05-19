@@ -24,7 +24,7 @@ services:
       DB_DSN: postgres://hargaemas:hargaemasBismillah123!@db:5432/hargaemas?sslmode=disable
       PORT: 8080
     ports:
-      - "8080:8080"
+      - "9090:8080"
     depends_on:
       db:
         condition: service_healthy

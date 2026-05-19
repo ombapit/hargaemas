@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -17,6 +18,9 @@ import (
 
 	_ "github.com/lib/pq"
 )
+
+//go:embed templates/index.html
+var indexHTML []byte
 
 var (
 	db       *sql.DB
@@ -65,11 +69,21 @@ func main() {
 	c.Start()
 	defer c.Stop()
 
+	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/prices", handlePrices)
 	http.HandleFunc("/fetch", handleFetch)
 
 	log.Printf("listening on :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write(indexHTML)
 }
 
 // POST /fetch — manual trigger

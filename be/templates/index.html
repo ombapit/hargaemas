@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raja Emas Indonesia</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gold:    #F5C518;
+      --gold-dim: #c9a000;
+      --bg:      #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #242424;
+      --border:  #2e2e2e;
+      --text:    #f0f0f0;
+      --text-dim: #888;
+      --radius:  12px;
+      --shadow:  0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1a1400 0%, #2a1f00 100%);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    header h1 {
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+    header p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* LAYOUT */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: grid;
+      gap: 24px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .card-header h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .card-body { padding: 20px; }
+
+    /* CURRENT PRICE TABLE */
+    .price-date {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      background: var(--surface2);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td {
+      padding: 12px 14px;
+      font-size: 0.92rem;
+    }
+    .kadar-badge {
+      display: inline-block;
+      background: rgba(245,197,24,0.12);
+      color: var(--gold);
+      border: 1px solid rgba(245,197,24,0.25);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .harga {
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .empty-msg {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* DATE RANGE CONTROLS */
+    .range-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .range-controls label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    input[type="date"] {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+      colorscheme: dark;
+    }
+    input[type="date"]:focus {
+      border-color: var(--gold-dim);
+    }
+    .btn {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: var(--gold-dim); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* KADAR FILTER CHIPS */
+    .kadar-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .chip {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-dim);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .chip.active {
+      background: rgba(245,197,24,0.15);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* CHART */
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+    @media (max-width: 480px) {
+      .chart-wrap { height: 240px; }
+    }
+
+    /* LOADING SPINNER */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">&#9760;</div>
+  <div>
+    <h1>Raja Emas Indonesia</h1>
+    <p>Harga Beli Emas Real-time</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- CURRENT PRICES -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Harga Emas Hari Ini</h2>
+      <span class="price-date" id="today-label">—</span>
+    </div>
+    <div id="current-table-wrap">
+      <div class="empty-msg">Memuat data<span class="spinner"></span></div>
+    </div>
+  </div>
+
+  <!-- HISTORY CHART -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Histori Harga</h2>
+      <div class="range-controls">
+        <label>Dari</label>
+        <input type="date" id="date-from" />
+        <label>Hingga</label>
+        <input type="date" id="date-to" />
+        <button class="btn" id="btn-load">Tampilkan</button>
+      </div>
+    </div>
+    <div class="kadar-filters" id="kadar-filters"></div>
+    <div class="card-body">
+      <div class="chart-wrap">
+        <canvas id="price-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>Data bersumber dari rajaemasindonesia.co.id</footer>
+
+<script>
+  const COLORS = [
+    '#F5C518','#FF6B6B','#4ECDC4','#A8E6CF','#FF8B94',
+    '#B8A9C9','#F7DC6F','#82E0AA','#F0B27A','#85C1E9','#C39BD3'
+  ];
+
+  // ---- UTILS ----
+  function today() {
+    return new Date().toISOString().slice(0, 10);
+  }
+  function daysAgo(n) {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString().slice(0, 10);
+  }
+  function formatRupiah(n) {
+    return 'Rp ' + Number(n).toLocaleString('id-ID');
+  }
+
+  // ---- INIT DATE INPUTS ----
+  const dateFrom = document.getElementById('date-from');
+  const dateTo   = document.getElementById('date-to');
+  dateFrom.value = daysAgo(30);
+  dateTo.value   = today();
+  document.getElementById('today-label').textContent = today();
+
+  // ---- CURRENT PRICES TABLE ----
+  async function loadCurrentPrices() {
+    const wrap = document.getElementById('current-table-wrap');
+    try {
+      const res  = await fetch(`/prices?date=${today()}`);
+      const data = await res.json();
+
+      if (!data || data.length === 0) {
+        wrap.innerHTML = '<div class="empty-msg">Belum ada data hari ini. Gunakan POST /fetch untuk mengambil data.</div>';
+        return;
+      }
+
+      let rows = data.map(p => `
+        <tr>
+          <td><span class="kadar-badge">${p.kadar}</span></td>
+          <td class="harga">${formatRupiah(p.harga_beli)}</td>
+          <td style="color:var(--text-dim);font-size:0.8rem">${new Date(p.recorded_at).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})} WIB</td>
+        </tr>`).join('');
+
+      wrap.innerHTML = `
+        <table>
+          <thead><tr>
+            <th>Kadar</th><th>Harga Beli / gram</th><th>Update</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    } catch(e) {
+      wrap.innerHTML = '<div class="empty-msg">Gagal memuat data.</div>';
+    }
+  }
+
+  // ---- CHART ----
+  let chart = null;
+  let allData = [];
+  let activeKadars = new Set();
+
+  async function loadHistory() {
+    const btn = document.getElementById('btn-load');
+    btn.disabled = true;
+    btn.textContent = 'Memuat…';
+    try {
+      const res  = await fetch(`/prices?from=${dateFrom.value}&to=${dateTo.value}`);
+      allData = await res.json() || [];
+      buildFilters();
+      renderChart();
+    } catch(e) {
+      console.error(e);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Tampilkan';
+    }
+  }
+
+  function buildFilters() {
+    const kadars = [...new Set(allData.map(p => p.kadar))].sort();
+    if (activeKadars.size === 0) activeKadars = new Set(kadars);
+
+    const wrap = document.getElementById('kadar-filters');
+    wrap.innerHTML = kadars.map(k => `
+      <span class="chip ${activeKadars.has(k) ? 'active' : ''}" data-kadar="${k}">${k}</span>
+    `).join('');
+
+    wrap.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const k = chip.dataset.kadar;
+        if (activeKadars.has(k)) activeKadars.delete(k);
+        else activeKadars.add(k);
+        chip.classList.toggle('active');
+        renderChart();
+      });
+    });
+  }
+
+  function renderChart() {
+    // group by kadar → map of date→price
+    const byKadar = {};
+    allData.forEach(p => {
+      if (!activeKadars.has(p.kadar)) return;
+      if (!byKadar[p.kadar]) byKadar[p.kadar] = {};
+      byKadar[p.kadar][p.price_date] = p.harga_beli;
+    });
+
+    // sorted unique dates
+    const dates = [...new Set(allData.map(p => p.price_date))].sort();
+
+    const datasets = Object.keys(byKadar).sort().map((kadar, i) => ({
+      label: kadar,
+      data: dates.map(d => byKadar[kadar][d] ?? null),
+      borderColor: COLORS[i % COLORS.length],
+      backgroundColor: COLORS[i % COLORS.length] + '22',
+      borderWidth: 2,
+      pointRadius: dates.length > 60 ? 0 : 3,
+      pointHoverRadius: 5,
+      tension: 0.3,
+      spanGaps: true,
+    }));
+
+    if (chart) chart.destroy();
+    const ctx = document.getElementById('price-chart').getContext('2d');
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: dates, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            labels: { color: '#888', font: { size: 11 }, boxWidth: 12 }
+          },
+          tooltip: {
+            backgroundColor: '#1a1a1a',
+            borderColor: '#2e2e2e',
+            borderWidth: 1,
+            titleColor: '#f0f0f0',
+            bodyColor: '#ccc',
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${formatRupiah(ctx.parsed.y)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#666', maxTicksLimit: 10, font: { size: 11 } },
+            grid: { color: '#1e1e1e' }
+          },
+          y: {
+            ticks: {
+              color: '#666',
+              font: { size: 11 },
+              callback: v => 'Rp ' + (v/1000).toFixed(0) + 'rb'
+            },
+            grid: { color: '#1e1e1e' }
+          }
+        }
+      }
+    });
+  }
+
+  document.getElementById('btn-load').addEventListener('click', loadHistory);
+
+  // ---- BOOT ----
+  loadCurrentPrices();
+  loadHistory();
+</script>
+</body>
+</html>
