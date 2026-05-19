@@ -74,11 +74,30 @@ func main() {
 
 	http.HandleFunc("/", handleIndex)
 	http.Handle("/static/", http.FileServer(http.FS(staticFiles)))
+	http.HandleFunc("/robots.txt", handleRobots)
+	http.HandleFunc("/sitemap.xml", handleSitemap)
 	http.HandleFunc("/prices", handlePrices)
 	http.HandleFunc("/fetch", handleFetch)
 
 	log.Printf("listening on :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func handleRobots(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprintf(w, "User-agent: *\nAllow: /\nSitemap: https://hargaemas.davidsuwandi.my.id/sitemap.xml\n")
+}
+
+func handleSitemap(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/xml")
+	fmt.Fprintf(w, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://hargaemas.davidsuwandi.my.id/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`)
 }
 
 func handleIndex(w http.ResponseWriter, r *http.Request) {
