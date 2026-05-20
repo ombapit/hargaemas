@@ -337,17 +337,25 @@
 
   // ---- CURRENT PRICES TABLE ----
   async function loadCurrentPrices() {
-    const wrap = document.getElementById('current-table-wrap');
+    const wrap  = document.getElementById('current-table-wrap');
+    const label = document.getElementById('today-label');
     try {
-      const res  = await fetch(`/prices?date=${today()}`);
-      const data = await res.json();
+      let res  = await fetch(`/prices?date=${today()}`);
+      let data = await res.json();
 
       if (!data || data.length === 0) {
-        wrap.innerHTML = '<div class="empty-msg">Belum ada data hari ini. Gunakan POST /fetch untuk mengambil data.</div>';
+        res  = await fetch('/prices/latest');
+        data = await res.json();
+      }
+
+      if (!data || data.length === 0) {
+        wrap.innerHTML = '<div class="empty-msg">Belum ada data. Gunakan POST /fetch untuk mengambil data.</div>';
         return;
       }
 
-      let rows = data.map(p => `
+      label.textContent = data[0].price_date;
+
+      const rows = data.map(p => `
         <tr>
           <td><span class="kadar-badge">${p.kadar}</span></td>
           <td class="harga">${formatRupiah(p.harga_beli)}</td>

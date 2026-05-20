@@ -76,11 +76,46 @@ func main() {
 	http.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 	http.HandleFunc("/robots.txt", handleRobots)
 	http.HandleFunc("/sitemap.xml", handleSitemap)
+	http.HandleFunc("/prices/latest", handleLatestPrices)
 	http.HandleFunc("/prices", handlePrices)
 	http.HandleFunc("/fetch", handleFetch)
 
 	log.Printf("listening on :%s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+// GET /prices/latest — data dari price_date terbaru yang ada di DB
+func handleLatestPrices(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	rows, err := db.Query(`
+		SELECT id, price_date, recorded_at, kadar, harga_beli FROM gold_prices
+		WHERE price_date = (SELECT MAX(price_date) FROM gold_prices)
+		ORDER BY CAST(REGEXP_REPLACE(kadar, '[^0-9]', '', 'g') AS INTEGER) DESC, kadar DESC`)
+	if err != nil {
+		http.Error(w, "query error", http.StatusInternalServerError)
+		log.Println("query error:", err)
+		return
+	}
+	defer rows.Close()
+
+	prices := []GoldPrice{}
+	for rows.Next() {
+		var p GoldPrice
+		var pd time.Time
+		if err := rows.Scan(&p.ID, &pd, &p.RecordedAt, &p.Kadar, &p.HargaBeli); err != nil {
+			http.Error(w, "scan error", http.StatusInternalServerError)
+			return
+		}
+		p.PriceDate = pd.Format("2006-01-02")
+		prices = append(prices, p)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(prices)
 }
 
 func handleRobots(w http.ResponseWriter, r *http.Request) {
