@@ -403,7 +403,10 @@
       if (nb !== na) return nb - na;
       return b.localeCompare(a); // K24* before K24
     });
-    if (activeKadars.size === 0) activeKadars = new Set(kadars);
+    if (activeKadars.size === 0) {
+      const defaultKadar = kadars.find(k => k === 'K24*') || kadars.find(k => k === 'K24') || kadars[0];
+      activeKadars = new Set([defaultKadar]);
+    }
 
     const wrap = document.getElementById('kadar-filters');
     wrap.innerHTML = kadars.map(k => `
