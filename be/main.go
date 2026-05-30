@@ -22,6 +22,9 @@ import (
 //go:embed templates/index.html
 var indexHTML []byte
 
+//go:embed templates/privacy-policy.html
+var privacyHTML []byte
+
 //go:embed static
 var staticFiles embed.FS
 
@@ -73,6 +76,7 @@ func main() {
 	defer c.Stop()
 
 	http.HandleFunc("/", handleIndex)
+	http.HandleFunc("/privacy-policy.html", handlePrivacy)
 	http.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 	http.HandleFunc("/robots.txt", handleRobots)
 	http.HandleFunc("/sitemap.xml", handleSitemap)
@@ -133,6 +137,11 @@ func handleSitemap(w http.ResponseWriter, r *http.Request) {
     <priority>1.0</priority>
   </url>
 </urlset>`)
+}
+
+func handlePrivacy(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write(privacyHTML)
 }
 
 func handleIndex(w http.ResponseWriter, r *http.Request) {
