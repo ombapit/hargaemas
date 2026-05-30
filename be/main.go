@@ -61,9 +61,9 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	// every day 12:00 WIB (05:00 UTC)
+	// every day 10:00 WIB (05:00 UTC)
 	c := cron.New(cron.WithLocation(jakartaLoc))
-	c.AddFunc("0 12 * * *", func() {
+	c.AddFunc("0 10 * * *", func() {
 		log.Println("cron: fetching gold prices")
 		if err := fetchAndStore(); err != nil {
 			log.Println("cron fetch error:", err)
