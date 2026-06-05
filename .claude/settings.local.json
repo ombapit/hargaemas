@@ -10,7 +10,10 @@
       "Read(//mnt/c/data_dave/work/alone/david/**)",
       "PowerShell(Get-ChildItem -Path \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\" -Recurse -File | ForEach-Object { $_.FullName })",
       "WebFetch(domain:rajaemasindonesia.co.id)",
-      "PowerShell(New-Item -ItemType Directory -Path \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\templates\" -Force)"
+      "PowerShell(New-Item -ItemType Directory -Path \"c:\\\\data_dave\\\\work\\\\alone\\\\david\\\\hargaemas\\\\be\\\\templates\" -Force)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

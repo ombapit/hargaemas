@@ -77,6 +77,15 @@ func main() {
 
 	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/privacy-policy.html", handlePrivacy)
+	http.HandleFunc("/app-ads.txt", func(w http.ResponseWriter, r *http.Request) {
+		data, err := staticFiles.ReadFile("static/app-ads.txt")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write(data)
+	})
 	http.Handle("/static/", http.FileServer(http.FS(staticFiles)))
 	http.HandleFunc("/robots.txt", handleRobots)
 	http.HandleFunc("/sitemap.xml", handleSitemap)
