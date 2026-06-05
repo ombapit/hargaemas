@@ -457,6 +457,7 @@
     <li><a href="#keamanan">Keamanan</a></li>
     <li><a href="#hak">Hak Pengguna</a></li>
     <li><a href="#anak">Anak-anak</a></li>
+    <li><a href="#hapus-akun">Hapus Akun</a></li>
     <li><a href="#kontak">Kontak</a></li>
   </ul>
 </nav>
@@ -465,7 +466,7 @@
 
   <div class="intro-box">
     <strong>Ringkasan</strong>
-    Kebijakan Privasi ini berlaku secara global untuk aplikasi <strong>OmbaPos</strong>, <strong>Share Live Location</strong>, dan <strong>Sports Club Lotus Palace</strong>. Dengan menggunakan salah satu aplikasi tersebut, Anda menyetujui pengumpulan dan penggunaan informasi sesuai kebijakan ini. Terakhir diperbarui: <strong>2026</strong>.
+    Kebijakan Privasi ini berlaku secara global untuk aplikasi <strong>OmbaPos</strong>, <strong>Share Live Location</strong>, dan <strong>Sports Club Lotus Palace</strong>. Dengan menggunakan salah satu aplikasi tersebut, Anda menyetujui pengumpulan dan penggunaan informasi sesuai kebijakan ini. Terakhir diperbarui: <strong>5 Juni 2026</strong>.
   </div>
 
   <!-- 1. Informasi Umum -->
@@ -503,33 +504,48 @@
           </thead>
           <tbody>
             <tr>
-              <td>Data Akun</td>
-              <td>Nama, email, nomor telepon, nama toko/usaha</td>
+              <td>Data Akun Google (Mode Online)</td>
+              <td>Email, nama, dan foto profil dari akun Google yang dipakai sign-in. Diambil hanya bila pengguna mengaktifkan Mode Online di Settings.</td>
+              <td><span class="tag required">Wajib (Mode Online)</span></td>
+            </tr>
+            <tr>
+              <td>Data Merchant &amp; Outlet</td>
+              <td>Nama usaha, nama outlet, alamat, nomor telepon, zona waktu</td>
               <td><span class="tag required">Wajib</span></td>
             </tr>
             <tr>
+              <td>Data Tim</td>
+              <td>Email anggota tim (manager / kasir) yang diundang oleh pemilik usaha untuk akses outlet</td>
+              <td><span class="tag optional">Opsional</span></td>
+            </tr>
+            <tr>
               <td>Data Transaksi</td>
-              <td>Riwayat penjualan, jumlah produk, total pembayaran, metode bayar</td>
+              <td>Riwayat penjualan, jumlah produk, total pembayaran, metode bayar, shift kasir</td>
               <td><span class="tag required">Wajib</span></td>
             </tr>
             <tr>
               <td>Data Produk</td>
-              <td>Nama produk, harga, stok, kategori, foto produk</td>
+              <td>Nama produk, harga, stok per outlet, kategori, SKU, varian, foto produk yang diunggah pengguna</td>
               <td><span class="tag required">Wajib</span></td>
             </tr>
             <tr>
               <td>Data Pelanggan</td>
-              <td>Nama pelanggan, kontak (jika disimpan oleh pengguna)</td>
+              <td>Nama pelanggan, kontak, tanggal lahir (jika disimpan oleh pengguna)</td>
+              <td><span class="tag optional">Opsional</span></td>
+            </tr>
+            <tr>
+              <td>Konfigurasi Pajak</td>
+              <td>Persentase pajak yang ditetapkan oleh pemilik usaha</td>
               <td><span class="tag optional">Opsional</span></td>
             </tr>
             <tr>
               <td>Data Perangkat</td>
-              <td>Jenis perangkat, OS, versi aplikasi, ID perangkat</td>
+              <td>Jenis perangkat, OS, versi aplikasi, ID perangkat untuk multi-device sync</td>
               <td><span class="tag required">Wajib</span></td>
             </tr>
             <tr>
               <td>Data Keuangan</td>
-              <td>Laporan penjualan, laba/rugi, ringkasan keuangan harian</td>
+              <td>Laporan penjualan, ringkasan keuangan harian, breakdown per outlet &amp; per varian</td>
               <td><span class="tag sensitive">Sensitif</span></td>
             </tr>
           </tbody>
@@ -661,11 +677,14 @@
       <div class="app-block-body">
         <ul class="clean-list">
           <li>Memproses dan mencatat transaksi penjualan</li>
-          <li>Menghasilkan laporan keuangan dan analitik bisnis</li>
-          <li>Mengelola stok dan inventaris produk</li>
-          <li>Sinkronisasi data antar perangkat yang terhubung ke akun yang sama</li>
+          <li>Menghasilkan laporan keuangan, grafik penjualan, dan analitik per outlet</li>
+          <li>Mengelola katalog produk, stok per outlet, dan shift kasir</li>
+          <li>Sinkronisasi 2-arah antara aplikasi mobile dan dashboard web</li>
+          <li>Mengelola tim (manager / kasir) dan izin akses per outlet</li>
+          <li>Memproses pembayaran QRIS melalui payment gateway pihak ketiga yang dipilih pemilik usaha (kredensial gateway disimpan lokal di HP, <strong>tidak</strong> dikirim ke server kami)</li>
+          <li>Autentikasi pengguna via Google Sign-In (hanya saat Mode Online aktif)</li>
+          <li>Mode Offline: semua data tersimpan lokal di perangkat tanpa koneksi server</li>
           <li>Memberikan dukungan teknis dan perbaikan bug</li>
-          <li>Meningkatkan performa dan fitur aplikasi</li>
         </ul>
       </div>
     </div>
@@ -745,7 +764,7 @@
       <h2>Retensi & Penghapusan Data</h2>
     </div>
     <ul class="clean-list">
-      <li><strong>OmbaPos:</strong> Data transaksi dan produk disimpan selama akun aktif dan hingga 5 tahun setelah akun ditutup untuk keperluan audit</li>
+      <li><strong>OmbaPos:</strong> Data merchant, outlet, katalog, pelanggan, dan transaksi disimpan selama akun aktif. Setelah pengguna mengajukan penghapusan akun: data identitas (akun Google, merchant, outlet, katalog, foto produk, pelanggan, tim, konfigurasi pajak) dihapus dalam 30 hari kerja. Log transaksi anonim (tanpa identitas user) dapat ditahan hingga 5 tahun sesuai ketentuan pembukuan/pajak. Log akses keamanan ditahan maksimal 90 hari. Mode Offline: data hanya berada di perangkat pengguna — uninstall aplikasi untuk menghapus. Kredensial Payment Gateway disimpan secara lokal di HP saja dan tidak pernah dikirim ke server kami.</li>
       <li><strong>Share Live Location:</strong> Data lokasi real-time tidak disimpan setelah sesi berbagi berakhir. Riwayat lokasi (jika diaktifkan) disimpan maksimal 90 hari</li>
       <li><strong>Sports Club Lotus Palace:</strong> Data booking (nama, alamat, jadwal) disimpan selama diperlukan untuk keperluan operasional lapangan. Data dapat dihapus oleh pemesan kapan saja menggunakan password booking</li>
       <li>Data akun dihapus permanen dalam 30 hari setelah permintaan penghapusan akun</li>
@@ -805,10 +824,68 @@
     <p>Jika Anda mengetahui bahwa seorang anak telah memberikan data pribadi kepada kami, harap hubungi kami segera dan kami akan menghapus data tersebut.</p>
   </section>
 
-  <!-- 9. Cookie & Pelacakan -->
-  <section>
+  <!-- 9. Penghapusan Akun -->
+  <section id="hapus-akun">
     <div class="section-header">
       <div class="section-number">9</div>
+      <h2>Penghapusan Akun &amp; Data</h2>
+    </div>
+    <p>Anda berhak meminta penghapusan akun beserta data yang terkait kapan saja.</p>
+
+    <div class="app-block">
+      <div class="app-block-header">
+        <div class="app-icon pos">🧾</div>
+        <h3>OmbaPos <span class="sub">— Cara Mengajukan</span></h3>
+      </div>
+      <div class="app-block-body">
+        <p style="margin-bottom: 0.75rem;">Kirim email dari alamat Google yang dipakai sign-in ke:</p>
+        <p style="font-size: 1.05rem; font-weight: 600;">
+          <a href="mailto:davidsuwandi@gmail.com?subject=Hapus%20Akun%20Omba%20POS">davidsuwandi@gmail.com</a>
+        </p>
+        <ul class="clean-list" style="margin-top: 1rem;">
+          <li><strong>Subjek:</strong> "Hapus Akun Omba POS"</li>
+          <li><strong>Isi:</strong> nama bisnis / merchant + alasan singkat (opsional)</li>
+          <li><strong>Estimasi proses:</strong> 30 hari kerja</li>
+          <li>Konfirmasi penghapusan dikirim via email setelah selesai</li>
+        </ul>
+
+        <p style="margin-top: 1.25rem;"><strong>Data yang dihapus:</strong></p>
+        <ul class="clean-list">
+          <li>Akun pengguna (email, nama, foto profil Google)</li>
+          <li>Data merchant &amp; outlet</li>
+          <li>Katalog: kategori, item, varian, foto produk yang diunggah</li>
+          <li>Riwayat transaksi, shift, dan stok per outlet</li>
+          <li>Data pelanggan &amp; anggota tim</li>
+          <li>Konfigurasi pajak</li>
+        </ul>
+
+        <p style="margin-top: 1.25rem;"><strong>Data yang ditahan sementara</strong> (untuk kewajiban hukum &amp; pencegahan fraud):</p>
+        <ul class="clean-list">
+          <li>Log transaksi anonim (tanpa identitas) — maksimal 5 tahun sesuai ketentuan pembukuan/pajak</li>
+          <li>Log keamanan / akses — maksimal 90 hari</li>
+        </ul>
+
+        <div class="warning-box" style="margin-top: 1.25rem;">
+          <strong>Mode Offline:</strong> data hanya ada di HP Anda dan tidak pernah dikirim ke server. Untuk menghapus, cukup <em>uninstall</em> aplikasi.
+        </div>
+      </div>
+    </div>
+
+    <div class="app-block">
+      <div class="app-block-header">
+        <div class="app-icon loc">📍</div>
+        <h3>Share Live Location &amp; Sports Club Lotus Palace</h3>
+      </div>
+      <div class="app-block-body">
+        <p>Share Live Location tidak menyimpan riwayat lokasi setelah sesi berbagi berakhir. Sports Club Lotus Palace tidak memerlukan akun. Untuk penghapusan data booking spesifik, gunakan password booking di aplikasi atau hubungi kontak di bawah.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Cookie & Pelacakan -->
+  <section>
+    <div class="section-header">
+      <div class="section-number">10</div>
       <h2>Cookie & Teknologi Pelacakan</h2>
     </div>
     <p>Aplikasi kami dapat menggunakan teknologi analitik pihak ketiga (seperti Firebase Analytics atau yang setara) untuk memahami bagaimana pengguna berinteraksi dengan aplikasi. Data ini digunakan secara anonim dan agregat untuk meningkatkan layanan.</p>
@@ -816,10 +893,10 @@
     <p>Anda dapat menonaktifkan pengumpulan data analitik melalui pengaturan aplikasi atau pengaturan privasi perangkat Anda.</p>
   </section>
 
-  <!-- 10. Perubahan -->
+  <!-- 11. Perubahan -->
   <section>
     <div class="section-header">
-      <div class="section-number">10</div>
+      <div class="section-number">11</div>
       <h2>Perubahan Kebijakan</h2>
     </div>
     <p>Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Perubahan material akan diberitahukan melalui:</p>
@@ -831,10 +908,10 @@
     <p style="margin-top:1rem;">Penggunaan aplikasi setelah pemberitahuan perubahan dianggap sebagai persetujuan Anda terhadap kebijakan yang diperbarui.</p>
   </section>
 
-  <!-- 11. Kontak -->
+  <!-- 12. Kontak -->
   <section id="kontak">
     <div class="section-header">
-      <div class="section-number">11</div>
+      <div class="section-number">12</div>
       <h2>Hubungi Kami</h2>
     </div>
     <p>Jika Anda memiliki pertanyaan, keluhan, atau ingin menggunakan hak privasi Anda, silakan hubungi kami:</p>
